@@ -16,7 +16,7 @@ import com.gunome.kuroneko.entity.Neko;
 public class NekoBean {
 	
 	private String name;
-	private Timestamp dateBirth;
+	private String dateBirth;
 	
 	private List<Neko> nekoList;
 	
@@ -31,7 +31,7 @@ public class NekoBean {
 	 */
 	@PostConstruct
 	public void init() {
-		getAllNeko();
+		getAllNekos();
 	}
 	
 	public String date() {
@@ -42,14 +42,26 @@ public class NekoBean {
 	 * create a new cat
 	 */
 	public void createNeko() {
-		if (name.isEmpty() && dateBirth != null) {
-			
+		if (!name.isEmpty() && !dateBirth.isEmpty()) {
+			Neko neko = new Neko();
+			neko.setName(name);
+			neko.setDateBirth(Timestamp.valueOf(dateBirth));
+			nekoFacade.create(neko);
+			getAllNekos();
 		}
+	}
+	
+	/**
+	 * delete a cat
+	 */
+	public void deleteNeko(Neko neko) {
+		nekoFacade.remove(neko);
+		getAllNekos();
 	}
 	/**
 	 * get all cats registered
 	 */
-	private void getAllNeko() {
+	private void getAllNekos() {
 		nekoList = nekoFacade.findAll();
 	}
 
@@ -69,11 +81,11 @@ public class NekoBean {
 		this.name = name;
 	}
 
-	public Timestamp getDateBirth() {
+	public String getDateBirth() {
 		return dateBirth;
 	}
 
-	public void setDateBirth(Timestamp dateBirth) {
+	public void setDateBirth(String dateBirth) {
 		this.dateBirth = dateBirth;
 	}
 }
