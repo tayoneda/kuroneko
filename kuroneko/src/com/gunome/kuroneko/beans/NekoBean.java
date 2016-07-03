@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -18,6 +20,9 @@ public class NekoBean {
 	private String name;
 	private String dateBirth;
 	
+	/**
+	 * a list of nekos
+	 */
 	private List<Neko> nekoList;
 	
 	/**
@@ -52,7 +57,20 @@ public class NekoBean {
 	}
 	
 	/**
+	 * update a neko
+	 * @param neko
+	 * @return path to navigate
+	 */
+	public String updateNeko(Neko neko) {
+		Flash flash = FacesContext.getCurrentInstance()
+				.getExternalContext().getFlash();
+		flash.put("editNekoId", neko.getId());
+		return "nekoEdit.xhtml";
+	}
+	
+	/**
 	 * delete a cat
+	 * @param neko to delete
 	 */
 	public void deleteNeko(Neko neko) {
 		nekoFacade.remove(neko);
